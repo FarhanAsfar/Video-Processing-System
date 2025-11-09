@@ -11,7 +11,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
-
+//creating a Queue
 const videoQueue = new Queue("video-processing", {
     connection: {host: "redis", port: 6379},
 });
