@@ -49,6 +49,11 @@ app.post("/api/videos", async(req, res) => {
     });
 });
 
+app.get("/api/videos", async(req, res) => {
+    const allVideos = await prisma.video.findMany();
+
+    return res.status(200).json(allVideos);
+})
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port: ${process.env.PORT}`);
