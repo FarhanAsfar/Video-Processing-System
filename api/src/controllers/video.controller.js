@@ -31,4 +31,12 @@ export const postVideo = asyncHandler(async (req, res) => {
     return res.status(201).json(
         new ApiResponse(201, video, "Video queued")
     );
+});
+
+export const getVideo = asyncHandler(async(req, res) => {
+    const allVideos = await prisma.video.findMany();
+
+    return res.status(200).json(
+        new ApiResponse(200, allVideos, "List of videos")
+    );
 })
