@@ -22,18 +22,36 @@ services:
       - "6379:6379"
   
   api:
-    build: ./api
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
     container_name: video_api
-    ports:
-      - "5000:5000"
     env_file:
       - ./api/.env
     depends_on:
       - postgres
       - redis
+    ports:
+      - "5000:5000"
     volumes:
       - ./api:/usr/src/app
-
+      - /usr/src/app/node_modules
+    command: ["npm", "start"]
+  
+  worker:
+    build:
+      context: .
+      dockerfile: ./worker/Dockerfile
+    container_name: video_worker
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./worker:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - ./worker/.env
+    command: ["npm", "start"]
 
 volumes:
   pgdata:

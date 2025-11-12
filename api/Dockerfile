@@ -1,17 +1,18 @@
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY ./api/package*.json ./
 RUN npm install
 
-COPY . .
+COPY ./api .  
+COPY ./api/prisma ./prisma
 
-RUN npx prisma generate
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 EXPOSE 5000
 
-CMD ["sh", "-c", "npx prisma generate && npm start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
 
 # CMD ["npm", "start"]
 
