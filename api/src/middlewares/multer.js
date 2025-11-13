@@ -12,27 +12,27 @@ const storage = multer.diskStorage({
         cb(null, tempDir)
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9)
-        cb(null, uniqueSuffix + "-" + file.originalname);
+        const uniquePrefix = Date.now() + "-" + Math.round(Math.random() * 1e9)
+        cb(null, uniquePrefix + "-" + file.originalname);
     }
 })
 
-// const fileFilter = (req, file, cb) => {
-//   const allowedTypes = /mp4|avi|mov|mkv/;
-//   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-//   const mimetype = allowedTypes.test(file.mimetype);
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /mp4|avi|mov|mkv/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
   
-//   if (extname && mimetype) {
-//     cb(null, true);
-//   } else {
-//     cb(new Error('Only video files are allowed!'));
-//   }
-// };
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only video files (mp4|mov|mkv|avi) are allowed!'));
+  }
+};
 
 const upload = multer({
     storage,
-    limits: {fileSize: 5*1024*1024}, //5mb limit
-    // fileFilter
+    limits: {fileSize: 10*1024*1024}, //5mb limit
+    fileFilter
 })
 
 export {upload};
