@@ -9,10 +9,10 @@ const prisma = new PrismaClient();
 
 
 export const postVideo = asyncHandler(async (req, res) => {
-    const {filename} = req.body;
+    const {filename} = req.file;
 
     if(!filename){
-        throw new ApiError(400, "Filename is required", ["File missing"]);
+        throw new ApiError(400, "File is required", ["No file uploaded"]);
     }
 
     const createVideo = await prisma.video.create({
@@ -22,6 +22,7 @@ export const postVideo = asyncHandler(async (req, res) => {
         },
     })
 
+    // pushing the file in a queue
     await videoQueue.add("process-video", {
         videoId: createVideo.id,
         filename: createVideo.filename,
