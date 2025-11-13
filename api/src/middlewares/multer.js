@@ -1,9 +1,8 @@
-import express from "express"
 import multer from "multer"
 import fs from "fs"
 import path from "path"
 
-const tempDir = path.resolve("upload/");
+const tempDir = path.resolve("uploads/");
 if(!fs.existsSync(tempDir)){
     fs.mkdirSync(tempDir, {recursive: true});
 }
