@@ -1,4 +1,3 @@
-import express from "express"
 import { videoQueue } from "../jobs/videoQueue.js"
 import { PrismaClient } from "@prisma/client"
 
@@ -16,7 +15,7 @@ export const postVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Filename is required", ["File missing"]);
     }
 
-    const video = await prisma.video.create({
+    const createVideo = await prisma.video.create({
         data: {
             filename,
             status: "queued"
@@ -24,12 +23,12 @@ export const postVideo = asyncHandler(async (req, res) => {
     })
 
     await videoQueue.add("process-video", {
-        videoId: video.id,
-        filename: video.filename,
+        videoId: createVideo.id,
+        filename: createVideo.filename,
     })
 
     return res.status(201).json(
-        new ApiResponse(201, video, "Video queued")
+        new ApiResponse(201, createVideo, "Video queued")
     );
 });
 
