@@ -13,7 +13,7 @@ const QUEUE_NAME = process.env.VIDEO_QUEUE_NAME ?? "video-processing";
 // directory to save uploaded videos inside worker container
 const UPLOAD_DIR = process.env.UPLOAD_DIR ?? "/usr/src/app/uploads"
 
-// directory to save processed videos
+// directory to save processed videos in the cotainer
 const PROCESSED_DIR = process.env.PROCESSED_DIR ?? "/usr/src/app/processed";
 
 // redis conneciton info for bullmq
@@ -24,10 +24,10 @@ const connection = {
 
 // Worker continuously listens for jobs in the queue and when a job arrives, BullMQ pushes it into this function.
 const worker = new Worker(
-    "QUEUE_NAME",
+    QUEUE_NAME,
 
     async (job) => {
-        const { videoId, filename} = job;
+        const { videoId, filename} = job.data;
         console.log(`[worker] picked job ${job.id} and processing video: ${job.data.filename}`);
 
         //marking video as 'processing' in DB
@@ -36,7 +36,7 @@ const worker = new Worker(
                 id: job.data.videoId
             },
             data: {
-                status: 'processed'
+                status: 'processing'
             },
         });
 
@@ -50,7 +50,7 @@ const worker = new Worker(
         //destination after processing
         const dest = path.join(PROCESSED_DIR, filename);
 
-        //copying the file for now
+        //copying the file for now(temporary)
         await fs.copyFile(src, dest);
 
         //updating db and marking the job as processed
@@ -66,20 +66,19 @@ const worker = new Worker(
     },
     {
         connection,
-        concurrency: Number(process.env.WORKER_CONCURRENCY ?? 2),
-        
+        concurrency: 2,
     }
 );
 
-//tracking job completions and failures
+//tracking job events completions and failures
 const events = new QueueEvents(QUEUE_NAME, {connection});
 
 events.on('completed', ({jobId}) => {
-    console.log(`[worker] job ${job.id} completed`)
+    console.log(`[worker] job ${jobId} completed`)
 })
 
 events.on('failed', ({jobId, failedReason}) => {
-    console.log(`[worker] job ${job.id} failed: ${failedReason}`);
+    console.log(`[worker] job ${jobId} failed: ${failedReason}`);
 });
 
 
@@ -92,7 +91,7 @@ const shutdown = async () => {
     process.exit(0);
 };
 
-process.on("SIGINT", shutdown1);
-process.on("SIGTERM", shutdown1);
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);
 
 console.log("[worker] worker started, waiting for jobs...");

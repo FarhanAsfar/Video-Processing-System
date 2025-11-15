@@ -45,10 +45,28 @@ export const postVideo = asyncHandler(async (req, res) => {
     );
 });
 
-export const getVideo = asyncHandler(async(req, res) => {
+export const getVideos = asyncHandler(async(req, res) => {
     const allVideos = await prisma.video.findMany();
 
     return res.status(200).json(
         new ApiResponse(200, allVideos, "List of videos")
+    );
+});
+
+export const getVideoById = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+
+    const video = await prisma.video.findUnique(
+        {
+            where: {id}
+        }
+    );
+
+    if(!video){
+        throw new ApiError(404, "Video not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, video, "Fetched video info")
     );
 })
