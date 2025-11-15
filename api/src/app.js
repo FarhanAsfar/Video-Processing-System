@@ -14,7 +14,7 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
-app.use("/api/video", videoRouter);
+app.use("/api/videos", videoRouter);
 
 app.get("/", (req, res) => {
     res.send("API is running")
