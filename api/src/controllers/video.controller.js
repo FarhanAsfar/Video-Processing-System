@@ -23,10 +23,22 @@ export const postVideo = asyncHandler(async (req, res) => {
     })
 
     // pushing the file in a queue
-    await videoQueue.add("process-video", {
-        videoId: createVideo.id,
-        filename: createVideo.filename,
-    })
+    await videoQueue.add(
+        "process-video", 
+        {
+            videoId: createVideo.id,
+            filename: createVideo.filename,
+        },
+        {
+            attempts: 3,
+            backoff: {
+                type: "exponential",
+                delay: 5000,
+            },
+            removeOnComplete: 1000,
+            removeOnFail: 1000,
+        }
+    )
 
     return res.status(201).json(
         new ApiResponse(201, createVideo, "Video queued")
