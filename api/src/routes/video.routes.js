@@ -4,7 +4,7 @@ import {upload} from "../middlewares/multer.js"
 
 const videoRouter = Router();
 
-videoRouter.route('/').post(upload.single("filename"), postVideo);
+videoRouter.route('/upload').post(upload.single("filename"), postVideo);
 videoRouter.route('/').get(getVideo)
                                               
 
