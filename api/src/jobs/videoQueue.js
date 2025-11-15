@@ -5,7 +5,7 @@ dotenv.config();
 
 export const videoQueue = new Queue('video-processing', {
     connection: {
-        host: 'redis',
-        port: 6379,
+        host: process.env.REDIS_HOST || 'redis',
+        port: process.env.REDIS_PORT || 6379,
     },
 });
