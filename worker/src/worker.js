@@ -8,7 +8,8 @@ const prisma = new PrismaClient();
 const worker = new Worker(
     "video-processing",
 
-    async job => {
+    async (job) => {
+        const { videoId, filename} = job;
         console.log(`Processing video: ${job.data.filename}`)
 
         await new Promise(res => setTimeout(res, 5000))
@@ -20,13 +21,13 @@ const worker = new Worker(
             data: {
                 status: 'processed'
             },
-        })
+        });
 
         console.log(`Video ${job.data.filename} has been processed`);
     },
     {
         connection: {
-            host: "redis",
+            host: process.env.REDIS_HOST || "redis",
             port: 6379,
         },
     }

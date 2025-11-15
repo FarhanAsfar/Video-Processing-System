@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
     }
 })
 
+// filtering only video files
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /mp4|avi|mov|mkv/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
