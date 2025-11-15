@@ -37,6 +37,8 @@ services:
     volumes:
       - ./api:/usr/src/app
       - /usr/src/app/node_modules
+      - ./api/uploads:/usr/src/app/uploads
+      - ./api/processed:/usr/src/app/processed
     command: ["npm", "start"]
   
   worker:
@@ -50,6 +52,8 @@ services:
     volumes:
       - ./worker:/usr/src/app
       - /usr/src/app/node_modules
+      - ./api/uploads:/usr/src/app/uploads
+      - ./api/processed:/usr/src/app/processed
     env_file:
       - ./worker/.env
     command: ["npm", "start"]
