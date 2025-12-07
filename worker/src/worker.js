@@ -3,7 +3,6 @@ import {Worker, QueueEvents} from "bullmq"
 import {PrismaClient} from "@prisma/client"
 import fs from "fs/promises"
 import path from "path"
-import { ok } from "assert"
 
 dotenv.config();
 const prisma = new PrismaClient();
