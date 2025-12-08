@@ -32,7 +32,7 @@ const worker = new Worker(
         //marking video as 'processing' in DB
         await prisma.video.update({
             where: {
-                id: job.data.videoId
+                id: videoId
             },
             data: {
                 status: 'processing'
