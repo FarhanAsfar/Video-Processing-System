@@ -3,7 +3,7 @@ node_modules
 .DS_Store
 /dist
 /prisma/dev.db
-explanations.md
+brief.md
 
 api/uplods/*
 api/processed/*
