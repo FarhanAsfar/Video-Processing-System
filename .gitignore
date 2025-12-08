@@ -4,3 +4,14 @@ node_modules
 /dist
 /prisma/dev.db
 explanations.md
+
+api/uplods/*
+api/processed/*
+worker/uplods/*
+worker/processed/*
+
+# Keeping directories but ignoring contents
+!api/uploads/.gitkeep
+!api/processed/.gitkeep
+!worker/uploads/.gitkeep
+!worker/processed/.gitkeep
