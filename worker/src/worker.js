@@ -3,7 +3,6 @@ import {Worker, QueueEvents} from "bullmq"
 import {PrismaClient} from "@prisma/client"
 import fs from "fs/promises"
 import path from "path"
-import { ok } from "assert"
 
 dotenv.config();
 const prisma = new PrismaClient();
@@ -33,7 +32,7 @@ const worker = new Worker(
         //marking video as 'processing' in DB
         await prisma.video.update({
             where: {
-                id: job.data.videoId
+                id: videoId
             },
             data: {
                 status: 'processing'
