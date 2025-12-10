@@ -1,6 +1,5 @@
 import express from "express"
 import dotenv from "dotenv"
-import {Queue} from "bullmq"
 import {PrismaClient} from "@prisma/client"
 
 import {videoRouter} from "./routes/video.routes.js"
