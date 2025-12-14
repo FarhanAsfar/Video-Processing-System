@@ -1,6 +1,5 @@
 import express from "express"
 import dotenv from "dotenv"
-import {Queue} from "bullmq"
 import {PrismaClient} from "@prisma/client"
 
 import {videoRouter} from "./routes/video.routes.js"
@@ -9,8 +8,6 @@ import { errorHandler } from "./middlewares/error.middleware.js"
 dotenv.config();
 
 const app = express();
-const prisma = new PrismaClient();
-
 
 app.use(express.json());
 
