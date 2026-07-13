@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY ./api/package*.json ./
 RUN npm install
 
-COPY ./api .  
+COPY ./api .
 COPY ./api/prisma ./prisma
 
 RUN npx prisma generate --schema=./prisma/schema.prisma
